@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.SignalR.Client;
-using System;
+﻿using System;
+using Microsoft.AspNet.SignalR.Client.Hubs;
 
 namespace SignalRChat.net
 {
@@ -7,14 +7,17 @@ namespace SignalRChat.net
     {
         static void Main(string[] args)
         {
-            var connection = new Connection("http://localhost:1599/chat");
-            connection.Received += data => Console.WriteLine("Received : "+data);
-            connection.Start().ContinueWith(t=>Console.WriteLine("Connected")).Wait();
+            var hubConnection = new HubConnection("http://localhost:1599");
+
+            var chat = hubConnection.CreateHubProxy("chat");
+            chat.On("addMessage", message => Console.WriteLine("Received : "+message));
+
+            hubConnection.Start().Wait();
 
             var line = string.Empty;
             while ((line = Console.ReadLine()) != null)
             {
-                connection.Send(line).Wait();
+                chat.Invoke("Send", line).Wait();
             }
         }
     }
