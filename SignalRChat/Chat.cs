@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
 
 namespace SignalRChat
@@ -19,8 +20,9 @@ namespace SignalRChat
             }
         }
 
-        public void Send(string room, string message)
+        public void Send(string message)
         {
+            var room = Clients.Caller.currentChatRoom;
             Clients.Group(room).addMessage(room, message);
         }
 
@@ -30,6 +32,11 @@ namespace SignalRChat
                 Clients.Caller.addChatRoom(room);
 
             return base.OnConnected();
+        }
+
+        public override Task OnDisconnected()
+        {
+            return base.OnDisconnected();
         }
     }
 }

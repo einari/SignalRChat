@@ -7,7 +7,6 @@
     <script src="/signalr/hubs" type="text/javascript"></script>
 
     <script type="text/javascript">
-        var currentChatRoom = "Lobby";
 
         function addChatRoomToList(chatRoom) {
             $("#chatRoomsList").append($("<option value="+chatRoom+">" + chatRoom + "</option>"));
@@ -26,6 +25,7 @@
             var chat = $.connection.chat;
 
             chat.client.addChatRoom = function (chatRoom) {
+                var currentChatRoom = chat.state.currentChatRoom;
                 addChatRoomToList(chatRoom);
                 if (chatRoom == currentChatRoom) {
                     $("#chatRoomsList").val(currentChatRoom);
@@ -34,17 +34,19 @@
             }
 
             chat.client.addMessage = function (room, message) {
-                if (room === currentChatRoom) {
+                if (room === chat.state.currentChatRoom) {
                     addMessageToChatWindow(message);
                 }
             }
 
             $.connection.hub.start().done(function () {
                 $("#chatWindow").val("Connected\n");
+                chat.state.currentChatRoom = "Lobby";
                 chat.server.join("Lobby");
                 $("#sendButton").click(function () {
-                    chat.server.send(currentChatRoom,$("#messageTextBox").val());
+                    chat.server.send($("#messageTextBox").val());
                     $("#messageTextBox").val("")
+                    
                 });
 
                 $("#createChatRoomButton").click(function () {
@@ -53,7 +55,8 @@
                 });
 
                 $("#chatRoomsList").change(function () {
-                    currentChatRoom = $("#chatRoomsList option:selected").val();
+                    var currentChatRoom = $("#chatRoomsList option:selected").val();
+                    chat.state.currentChatRoom = currentChatRoom;
                     chat.server.join(currentChatRoom);
                     clearChatRoomForRoomChange(currentChatRoom);
                 });
