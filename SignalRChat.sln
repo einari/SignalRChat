@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{3E4639
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRChat.Server", "SignalRChat.Server\SignalRChat.Server.csproj", "{C54B666C-93BC-4061-BA73-73EB11ED2D83}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,10 @@ Global
 		{F4BFB902-D30E-444B-8E13-2FE04F3E08EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F4BFB902-D30E-444B-8E13-2FE04F3E08EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F4BFB902-D30E-444B-8E13-2FE04F3E08EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C54B666C-93BC-4061-BA73-73EB11ED2D83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C54B666C-93BC-4061-BA73-73EB11ED2D83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C54B666C-93BC-4061-BA73-73EB11ED2D83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C54B666C-93BC-4061-BA73-73EB11ED2D83}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
