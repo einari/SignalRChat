@@ -7,7 +7,7 @@ namespace SignalRChat.net
 {
     class Program
     {
-        const string Site = "http://localhost:8080"; //1599";
+        const string Site = "http://localhost:8181"; //1599";
 
         static CookieContainer Authenticate(string userName, string password)
         {
@@ -25,7 +25,7 @@ namespace SignalRChat.net
         static void Main(string[] args)
         {
             var hubConnection = new HubConnection(Site);
-            hubConnection.CookieContainer = Authenticate("SomeCreator", "1234");
+            //hubConnection.CookieContainer = Authenticate("SomeCreator", "1234");
             var chat = hubConnection.CreateHubProxy("chat");
 
             chat["currentChatRoom"] = "Lobby";
