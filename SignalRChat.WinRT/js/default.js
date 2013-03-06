@@ -33,7 +33,8 @@
             }
         }
 
-        $.connection.hub.url = "http://localhost:8181/signalr";
+        // Uncomment next line if using self hosted server
+        //$.connection.hub.url = "http://localhost:8181/signalr";
         $.connection.hub.start().done(function () {
             $("#chatWindow").val("Connected\n");
             
