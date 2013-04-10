@@ -11,7 +11,7 @@ namespace SignalRChat
         {
             RouteTable
                 .Routes
-                    .MapConnection<ChatConnection>("chat", "chat/{*operation}");
+                    .MapConnection<ChatConnection>("chat", "/chat");
         }
     }
 }
