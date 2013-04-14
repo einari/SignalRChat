@@ -10,10 +10,9 @@ namespace SignalRChat.net
             var hubConnection = new HubConnection("http://localhost:1599");
             var chat = hubConnection.CreateHubProxy("chat");
 
-            var currentRoom = "Lobby";
-
+            chat["currentChatRoom"] = "Lobby";
             chat.On("addMessage", (string room,string message) => {
-                if( room == currentRoom ) 
+                if (room == (string)chat["currentChatRoom"]) 
                     Console.WriteLine("Received : " + message);
             });
 
@@ -23,7 +22,7 @@ namespace SignalRChat.net
 
             Console.WriteLine("Connected");
 
-            chat.Invoke("Join", currentRoom).Wait();
+            chat.Invoke("Join", (string)chat["currentChatRoom"]).Wait();
 
             var line = string.Empty;
             while ((line = Console.ReadLine()) != null)
@@ -32,16 +31,15 @@ namespace SignalRChat.net
                 {
                     var room = line.Substring("/create".Length + 1);
                     chat.Invoke("CreateChatRoom", room);
-                }
-                if (line.StartsWith("/join"))
+                } else if (line.StartsWith("/join"))
                 {
                     var room = line.Substring("/join".Length + 1);
                     chat.Invoke("Join", room).Wait();
-                    currentRoom = room;
+                    chat["currentChatRoom"] = room;
                 }
                 else
                 {
-                    chat.Invoke("Send", currentRoom, line).Wait();
+                    chat.Invoke("Send", line).Wait();
                 }
             }
         }

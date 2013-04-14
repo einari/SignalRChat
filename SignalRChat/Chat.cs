@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR;
 
 namespace SignalRChat
@@ -7,6 +8,9 @@ namespace SignalRChat
     {
         public void Join(string room)
         {
+            if (!string.IsNullOrEmpty(Clients.Caller.currentChatRoom))
+                Groups.Remove(Context.ConnectionId, Clients.Caller.currentChatRoom);
+
             Groups.Add(Context.ConnectionId, room);
         }
 
@@ -19,8 +23,9 @@ namespace SignalRChat
             }
         }
 
-        public void Send(string room, string message)
+        public void Send(string message)
         {
+            var room = Clients.Caller.currentChatRoom;
             Clients.Group(room).addMessage(room, message);
         }
 
@@ -31,7 +36,10 @@ namespace SignalRChat
 
             return base.OnConnected();
         }
+
+        public override Task OnDisconnected()
+        {
+            return base.OnDisconnected();
+        }
     }
 }
-
-
