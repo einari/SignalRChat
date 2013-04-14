@@ -1,12 +1,37 @@
-﻿using Microsoft.AspNet.SignalR;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNet.SignalR;
 
 namespace SignalRChat
 {
     public class Chat : Hub
     {
-        public void Send(string message)
+        public void Join(string room)
         {
-            Clients.All.addMessage(message);
+            Groups.Add(Context.ConnectionId, room);
+        }
+
+        public void CreateChatRoom(string room)
+        {
+            if (!ChatRooms.Exists(room))
+            {
+                ChatRooms.Add(room);
+                Clients.All.addChatRoom(room);
+            }
+        }
+
+        public void Send(string room, string message)
+        {
+            Clients.Group(room).addMessage(room, message);
+        }
+
+        public override Task OnConnected()
+        {
+            foreach (var room in ChatRooms.GetAll())
+                Clients.Caller.addChatRoom(room);
+
+            return base.OnConnected();
         }
     }
 }
+
+

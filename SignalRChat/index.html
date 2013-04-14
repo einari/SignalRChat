@@ -7,29 +7,85 @@
     <script src="/signalr/hubs" type="text/javascript"></script>
 
     <script type="text/javascript">
+        var currentChatRoom = "Lobby";
+
+        function addChatRoomToList(chatRoom) {
+            $("#chatRoomsList").append($("<option value="+chatRoom+">" + chatRoom + "</option>"));
+        }
+
+        function addMessageToChatWindow(message) {
+            $("#chatWindow").val($("#chatWindow").val() + message + "\n");
+        }
+
+        function clearChatRoomForRoomChange(chatRoom) {
+            $("#chatWindow").val("");
+            addMessageToChatWindow("Welcome to " + chatRoom);
+        }
+
         $(function () {
             var chat = $.connection.chat;
 
-            chat.client.addMessage = function (message) {
-                $("#chatWindow").val($("#chatWindow").val() + message + "\n");
+            chat.client.addChatRoom = function (chatRoom) {
+                addChatRoomToList(chatRoom);
+                if (chatRoom == currentChatRoom) {
+                    $("#chatRoomsList").val(currentChatRoom);
+                    addMessageToChatWindow("Welcome to " + currentChatRoom);
+                }
+            }
+
+            chat.client.addMessage = function (room, message) {
+                if (room === currentChatRoom) {
+                    addMessageToChatWindow(message);
+                }
             }
 
             $.connection.hub.start().done(function () {
                 $("#chatWindow").val("Connected\n");
+                chat.server.join("Lobby");
                 $("#sendButton").click(function () {
-                    chat.server.send($("#messageTextBox").val());
+                    chat.server.send(currentChatRoom,$("#messageTextBox").val());
                     $("#messageTextBox").val("")
+                });
+
+                $("#createChatRoomButton").click(function () {
+                    chat.server.createChatRoom($("#chatRoomTextBox").val());
+                    $("#chatRoomTextBox").val("")
+                });
+
+                $("#chatRoomsList").change(function () {
+                    currentChatRoom = $("#chatRoomsList option:selected").val();
+                    chat.server.join(currentChatRoom);
+                    clearChatRoomForRoomChange(currentChatRoom);
                 });
             });
         });
     </script>
 </head>
 <body>
-    <textarea id="chatWindow" style="width:400px; height:200px;"></textarea>
-    <div>
-        <label>Message</label>
-        <input id="messageTextBox" type="text" />
-        <button id="sendButton">Send</button>
-    </div>
+    
+    <table>
+        <tr style="vertical-align:top;">
+            <td>
+                <select id="chatRoomsList" size="2" style="width:150px; height:206px;">
+                </select>
+            </td>
+            <td>
+                <textarea id="chatWindow" style="width:400px; height:200px;"></textarea>
+                <div>
+                    <label>Message</label>
+                    <input id="messageTextBox" type="text" />
+                    <button id="sendButton">Send</button>
+                </div>
+                <div>
+                    <label>Start new chat room</label>
+                    <input id="chatRoomTextBox" type="text" />
+                    <button id="createChatRoomButton">Create</button>
+                </div>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>
+
+
+
