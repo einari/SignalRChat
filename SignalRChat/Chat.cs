@@ -36,11 +36,13 @@ namespace SignalRChat
             foreach (var room in ChatRooms.GetAll())
                 Clients.Caller.addChatRoom(room);
 
+            System.Console.WriteLine("Connected");
             return base.OnConnected();
         }
 
         public override Task OnDisconnected()
         {
+            System.Console.WriteLine("Disconnected");
             return base.OnDisconnected();
         }
     }

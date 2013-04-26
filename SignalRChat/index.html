@@ -40,7 +40,7 @@
             }
 
             $.connection.hub.url = "http://localhost:8080/signalr";
-            $.connection.hub.start().done(function () {
+            $.connection.hub.start({ jsonp: true }).done(function () {
                 $("#chatWindow").val("Connected\n");
                 chat.state.currentChatRoom = "Lobby";
                 chat.server.join("Lobby").fail(function (e) {
