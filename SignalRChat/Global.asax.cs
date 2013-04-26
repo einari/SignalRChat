@@ -14,6 +14,31 @@ namespace SignalRChat
                 .Routes
                     .MapHubs();
 
+            /*
+            GlobalHost
+                .DependencyResolver
+                    .UseSqlServer(
+                        "Data Source=(local);" +
+                        "Initial Catalog=SignalRChat;" +
+                        "Integrated Security=true");
+            */
+
+            /*
+            GlobalHost
+                .DependencyResolver
+                    .UseRedis(
+                        "localhost",
+                        6379,
+                        "",
+                        new[] { "signalr.key" });
+             */
+
+            /*
+            GlobalHost
+                .DependencyResolver
+                    .UseWindowsAzureServiceBus("", 1);
+            */
+
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
