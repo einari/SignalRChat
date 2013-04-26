@@ -1,4 +1,5 @@
-﻿using Owin;
+﻿using Microsoft.AspNet.SignalR;
+using Owin;
 
 namespace SignalRChat.Server
 {
@@ -7,7 +8,13 @@ namespace SignalRChat.Server
         public void Configuration(IAppBuilder builder)
         {
             builder.Use(typeof(SecurityInspectionHandler));
-            builder.MapHubs();
+            var hubConfiguration = new HubConfiguration()
+            {
+                EnableCrossDomain = true,
+                EnableJavaScriptProxies = true,
+                EnableDetailedErrors = true,
+            };
+            builder.MapHubs(hubConfiguration);
         }
     }
 }
