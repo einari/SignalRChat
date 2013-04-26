@@ -7,7 +7,7 @@ namespace SignalRChat.net
 {
     class Program
     {
-        const string Site = "http://localhost:1599";
+        const string Site = "http://localhost:8080"; //1599";
 
         static CookieContainer Authenticate(string userName, string password)
         {
