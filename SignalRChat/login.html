@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <script src="Scripts/jquery-1.8.3.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#loginButton").click(function () {
+                var userName = $("#userNameInput").val();
+                var password = $("#passwordInput").val();
+
+                $.post("SecurityHandler.ashx", {
+                        userName: userName,
+                        password: password
+                }).done(function (e) {
+                    window.location.href = "index.html"
+                }).fail(function (e) {
+                    alert("Not allowed to log in");
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <fieldset>
+        <legend>Login</legend>
+        <label for="userNameInput">Username</label><input id="userNameInput" type="text" /><br />
+        <label for="passwordInput">Password</label><input id="passwordInput" type="password" /><br />
+        <button id="loginButton">Login</button>
+    </fieldset>
+</body>
+</html>
+
+
+

@@ -1,13 +1,31 @@
 ﻿using System;
+using System.Collections.Specialized;
+using System.Net;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 
 namespace SignalRChat.net
 {
     class Program
     {
+        const string Site = "http://localhost:1599";
+
+        static CookieContainer Authenticate(string userName, string password)
+        {
+            var postData = new NameValueCollection();
+            postData.Add("userName", userName);
+            postData.Add("password", password);
+
+            var url = string.Format("{0}/SecurityHandler.ashx", Site);
+            var webClient = new CookieAwareWebClient();
+            var result = webClient.UploadValues(url, postData);
+
+            return webClient.CookieContainer;
+        }
+
         static void Main(string[] args)
         {
-            var hubConnection = new HubConnection("http://localhost:1599");
+            var hubConnection = new HubConnection(Site);
+            hubConnection.CookieContainer = Authenticate("SomeCreator", "1234");
             var chat = hubConnection.CreateHubProxy("chat");
 
             chat["currentChatRoom"] = "Lobby";
